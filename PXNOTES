@@ -1,3 +1,9 @@
 * px using base 2.0.874 to match base build/runtime container
 * iscsi updated to use regular unix socket instead of abstract namespace
  socket to enable container to host communication
+
+Build notes
+dependancy open-isns hdrs/lib
+CFLAGS="-DUSE_UNIX_SOCKET -g -O2" make
+
+
