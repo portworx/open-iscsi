@@ -31,7 +31,7 @@ endif
 CFLAGS ?= -O2 -g
 WARNFLAGS ?= -Wall -Wstrict-prototypes
 CFLAGS += $(WARNFLAGS) -I../include -I. -D$(OSNAME) $(IPC_CFLAGS)
-PROGRAMS = iscsid iscsiadm iscsistart
+PROGRAMS = px-iscsid px-iscsiadm px-iscsistart
 
 # libc compat files
 SYSDEPS_SRCS = $(sort $(wildcard ../utils/sysdeps/*.o))
@@ -52,14 +52,14 @@ DISCOVERY_SRCS = $(FW_BOOT_SRCS) strings.o discovery.o
 
 all: $(PROGRAMS)
 
-iscsid: $(ISCSI_LIB_SRCS) $(INITIATOR_SRCS) $(DISCOVERY_SRCS) \
+px-iscsid: $(ISCSI_LIB_SRCS) $(INITIATOR_SRCS) $(DISCOVERY_SRCS) \
 	iscsid.o session_mgmt.o discoveryd.o mntcheck.o
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@  -lisns -lcrypto -lrt -lmount
 
-iscsiadm: $(ISCSI_LIB_SRCS) $(DISCOVERY_SRCS) iscsiadm.o session_mgmt.o mntcheck.o
+px-iscsiadm: $(ISCSI_LIB_SRCS) $(DISCOVERY_SRCS) iscsiadm.o session_mgmt.o mntcheck.o
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lisns -lcrypto -lmount
 
-iscsistart: $(ISCSI_LIB_SRCS) $(INITIATOR_SRCS) $(FW_BOOT_SRCS) \
+px-iscsistart: $(ISCSI_LIB_SRCS) $(INITIATOR_SRCS) $(FW_BOOT_SRCS) \
 		iscsistart.o statics.o
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lrt
 clean:

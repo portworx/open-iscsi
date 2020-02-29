@@ -61,11 +61,19 @@ static int ipc_connect(int *fd, char *unix_sock_name, int start_iscsid)
 	int nsec, addr_len;
 	struct sockaddr_un addr;
 
+#ifdef USE_UNIX_SOCKET
+	*fd = socket(AF_UNIX, SOCK_STREAM, 0);
+	if (*fd < 0) {
+		log_error("can not create IPC socket (%d)!", errno);
+		return ISCSI_ERR_ISCSID_NOTCONN;
+	}
+#else
 	*fd = socket(AF_LOCAL, SOCK_STREAM, 0);
 	if (*fd < 0) {
 		log_error("can not create IPC socket (%d)!", errno);
 		return ISCSI_ERR_ISCSID_NOTCONN;
 	}
+#endif
 
 	addr_len = setup_abstract_addr(&addr, unix_sock_name);
 
@@ -98,7 +106,11 @@ static int ipc_connect(int *fd, char *unix_sock_name, int start_iscsid)
 
 static int iscsid_connect(int *fd, int start_iscsid)
 {
+#ifdef USE_UNIX_SOCKET
+	return ipc_connect(fd, ISCSIADM_SOCKET, start_iscsid);
+#else
 	return ipc_connect(fd, ISCSIADM_NAMESPACE, start_iscsid);
+#endif
 }
 
 int iscsid_request(int *fd, iscsiadm_req_t *req, int start_iscsid)

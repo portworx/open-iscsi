@@ -1129,6 +1129,21 @@ int iscsid_init()
 	if (iscsid_opts.fd >= 0)
 		return 0;
 
+	memset(&addr, 0, sizeof(addr));
+#ifdef USE_UNIX_SOCKET
+	iscsid_opts.fd = socket(AF_UNIX, SOCK_STREAM, 0);
+	if (iscsid_opts.fd < 0) {
+		LOG_ERR(PFX "Can not create IPC socket");
+		return iscsid_opts.fd;
+	}
+	unlink(ISCSID_UIP_SOCKET);
+
+	addr_len = offsetof(struct sockaddr_un, sun_path) + strlen(ISCSID_UIP_SOCKET);
+
+	addr.sun_family = AF_UNIX;
+	memcpy((char *)&addr.sun_path, ISCSID_UIP_SOCKET,
+	       strlen(ISCSID_UIP_SOCKET));
+#else
 	iscsid_opts.fd = socket(AF_LOCAL, SOCK_STREAM, 0);
 	if (iscsid_opts.fd < 0) {
 		LOG_ERR(PFX "Can not create IPC socket");
@@ -1137,10 +1152,10 @@ int iscsid_init()
 
 	addr_len = offsetof(struct sockaddr_un, sun_path) + strlen(ISCSID_UIP_NAMESPACE) + 1;
 
-	memset(&addr, 0, sizeof(addr));
 	addr.sun_family = AF_LOCAL;
 	memcpy((char *)&addr.sun_path + 1, ISCSID_UIP_NAMESPACE,
 	       strlen(ISCSID_UIP_NAMESPACE));
+#endif
 
 	rc = bind(iscsid_opts.fd, (struct sockaddr *)&addr, addr_len);
 	if (rc < 0) {

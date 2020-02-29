@@ -24,6 +24,7 @@
 #include "initiator.h"
 #include "transport.h"
 
+#define ISCSID_UIP_SOCKET	"/run/lock/iscsi/iscsd.lock"
 #define ISCSID_UIP_NAMESPACE	"ISCSID_UIP_ABSTRACT_NAMESPACE"
 
 typedef enum iscsid_uip_cmd {

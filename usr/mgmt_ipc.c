@@ -53,6 +53,15 @@ mgmt_ipc_listen(void)
 	if (fd >= 0)
 		return fd;
 
+#ifdef USE_UNIX_SOCKET
+	fd = socket(AF_UNIX, SOCK_STREAM, 0);
+	if (fd < 0) {
+		log_error("Can not create IPC socket");
+		return fd;
+	}
+	unlink(ISCSIADM_SOCKET);
+	addr_len = setup_abstract_addr(&addr, ISCSIADM_SOCKET);
+#else
 	/* manually establish a socket */
 	fd = socket(AF_LOCAL, SOCK_STREAM, 0);
 	if (fd < 0) {
@@ -61,6 +70,7 @@ mgmt_ipc_listen(void)
 	}
 
 	addr_len = setup_abstract_addr(&addr, ISCSIADM_NAMESPACE);
+#endif
 
 	if ((err = bind(fd, (struct sockaddr *) &addr, addr_len)) < 0 ) {
 		log_error("Can not bind IPC socket");
