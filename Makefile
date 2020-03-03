@@ -15,7 +15,7 @@ etcdir = /etc
 initddir = $(etcdir)/init.d
 
 MANPAGES = doc/iscsid.8 doc/iscsiadm.8 doc/iscsi_discovery.8 iscsiuio/docs/iscsiuio.8
-PROGRAMS = usr/px-iscsid usr/px-iscsiadm utils/iscsi_discovery utils/iscsi-iname iscsiuio/src/unix/iscsiuio
+PROGRAMS = usr/px-iscsid usr/px-iscsiadm utils/iscsi_discovery utils/iscsi-iname iscsiuio/src/unix/px_iscsiuio
 INSTALL = install
 ETCFILES = etc/iscsid.conf
 IFACEFILES = etc/iface.example
@@ -49,7 +49,7 @@ user: iscsiuio/Makefile
 	@echo "Built iSCSI daemon:                  usr/px-iscsid"
 	@echo "Built management application:        usr/px-iscsiadm"
 	@echo "Built boot tool:                     usr/px-iscsistart"
-	@echo "Built iscsiuio daemon:               iscsiuio/src/unix/iscsiuio"
+	@echo "Built iscsiuio daemon:               iscsiuio/src/unix/px_iscsiuio"
 	@echo
 	@echo "Read README file for detailed information."
 

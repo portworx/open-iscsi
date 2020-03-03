@@ -23,7 +23,7 @@
 #include "iscsi_if.h"
 #include "config.h"
 
-#define ISCSIADM_SOCKET 	"/run/lock/iscsi/iscsd.lock"
+#define ISCSIADM_SOCKET	"/var/lock/iscsi/px-iscsid.sock"
 #define ISCSIADM_NAMESPACE	"ISCSIADM_ABSTRACT_NAMESPACE"
 #define PEERUSER_MAX		64
 
