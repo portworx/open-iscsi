@@ -35,8 +35,20 @@
 
 #define ISCSI_CONFIG_ROOT	"/etc/iscsi/"
 
-#define CONFIG_FILE		ISCSI_CONFIG_ROOT"iscsid.conf"
 #define INITIATOR_NAME_FILE	ISCSI_CONFIG_ROOT"initiatorname.iscsi"
+
+#ifdef USE_UNIX_SOCKET
+// use portworx patch paths
+#define CONFIG_FILE		ISCSI_CONFIG_ROOT"px-iscsid.conf"
+
+#define PID_FILE		"/var/run/px-iscsid.pid"
+#ifndef LOCK_DIR
+#define LOCK_DIR		"/var/lock/iscsi"
+#endif
+#define LOCK_FILE		LOCK_DIR"/px-lock"
+#define LOCK_WRITE_FILE		LOCK_DIR"/px-lock.write"
+#else
+#define CONFIG_FILE		ISCSI_CONFIG_ROOT"iscsid.conf"
 
 #define PID_FILE		"/var/run/iscsid.pid"
 #ifndef LOCK_DIR
@@ -44,6 +56,7 @@
 #endif
 #define LOCK_FILE		LOCK_DIR"/lock"
 #define LOCK_WRITE_FILE		LOCK_DIR"/lock.write"
+#endif
 
 typedef enum iscsi_session_r_stage_e {
 	R_STAGE_NO_CHANGE,

@@ -1,0 +1,9 @@
+[Unit]
+Description=Portworx patched Open-iSCSI iscsid Socket
+Documentation=man:iscsid(8) man:iscsiadm(8)
+
+[Socket]
+ListenStream=/var/lock/iscsi/px-iscsid.sock
+
+[Install]
+WantedBy=sockets.target
